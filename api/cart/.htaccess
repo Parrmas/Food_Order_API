@@ -1,0 +1,9 @@
+RewriteEngine On    # Turn on the rewriting engine
+
+RewriteRule ^getCart$ getCart.php
+RewriteRule ^clearCart$ clearCart.php
+RewriteRule ^addItem$ addItem.php
+RewriteRule ^updateItem$ updateItem.php
+RewriteRule ^removeItem$ removeItem.php
+
+
