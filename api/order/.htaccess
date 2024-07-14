@@ -2,4 +2,4 @@ RewriteEngine On    # Turn on the rewriting engine
 
 RewriteRule ^listAll/([0-9a-zA-Z_-]*)$ listAll.php?id_user=$1 [NC,L]
 RewriteRule ^listOne/([0-9a-zA-Z_-]*)$ listOne.php?id=$1 [NC,L]
-
+RewriteRule ^placeOrder$ placeOrder.php [NC,L]

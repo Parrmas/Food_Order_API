@@ -53,4 +53,19 @@ class orderHelper
             throw $e;
         }
     }
+
+    public function create($address, $order_fee, $total_fee, $note, $id_buyer) {
+        $db = DbHelper::getInstance()->getConnection();
+        $shipping_fee = 3;
+        $status = 'Pending';
+        $stmt = $db->prepare("INSERT INTO `order` (address, order_fee, shipping_fee, total_fee, note, status, id_buyer) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sdddsis", $address, $order_fee, $shipping_fee, $total_fee, $note, $status, $id_buyer);
+        $result = $stmt->execute();
+
+        if ($result) {
+            return $db->insert_id;
+        } else {
+            throw new Exception("Error creating order: " . $stmt->error);
+        }
+    }
 }

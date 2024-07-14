@@ -30,5 +30,18 @@ class orderItemHelper
             throw $e;
         }
     }
+
+    public function create($id_food, $amount, $id_order) {
+        $db = DbHelper::getInstance()->getConnection();
+        $stmt = $db->prepare("INSERT INTO `order_item` (id_food, amount, id_order) VALUES (?, ?, ?)");
+        $stmt->bind_param("iii", $id_food, $amount, $id_order);
+        $result = $stmt->execute();
+
+        if ($result) {
+            return $db->insert_id;
+        } else {
+            throw new Exception("Error creating order item: " . $stmt->error);
+        }
+    }
 }
 ?>

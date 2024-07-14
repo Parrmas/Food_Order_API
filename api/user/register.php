@@ -8,10 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $phone = $_POST['phone'];
     $db = new DbHelper();
     $userHelper = new userHelper();
     try {
-        $result = $userHelper->register($name, $email, $password);
+        $check = $userHelper->checkIfExist($email);
+        if ($check) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Email has already been used.', 'status' => 2]);
+            exit();
+        }
+        $result = $userHelper->register($name, $email, $password, $phone);
         if ($result) {
             http_response_code(200);
             echo json_encode(['message' => 'Register Successful', 'status' => 0], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

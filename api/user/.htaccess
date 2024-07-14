@@ -4,5 +4,6 @@ RewriteRule ^listOne/([0-9a-zA-Z_-]*)$ listOne.php?id_user=$1 [NC,L]
 RewriteRule ^login$ login.php
 RewriteRule ^logout$ logout.php
 RewriteRule ^register$ register.php
+RewriteRule ^changeAvatar$ changeAvatar.php
 
 
