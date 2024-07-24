@@ -11,6 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $db = new DbHelper();
     $userHelper = new userHelper();
     try {
+        $check = $userHelper->checkIfActive($email);
+        if ($check) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Email has been deactivated.', 'status' => 2]);
+            exit();
+        }
         $result = $userHelper->login($email, $password);
         if ($result) {
             $_SESSION['user'] = $email;

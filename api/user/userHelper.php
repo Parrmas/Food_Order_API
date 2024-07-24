@@ -89,8 +89,8 @@ class userHelper
     public function register($name, $email, $password, $phone) {
         try {
             $db = DbHelper::getInstance()->getConnection();
-            $stmt = $db->prepare("INSERT INTO `" . $this->table_name . "`(name, phone, email, password, phone) VALUE (?, ?, ?, ?)");
-            $stmt->bind_param("sss", $name, $phone, $email, password_hash($password, PASSWORD_DEFAULT));
+            $stmt = $db->prepare("INSERT INTO `" . $this->table_name . "`(name, phone, email, password) VALUE (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $name, $phone, $email, password_hash($password, PASSWORD_DEFAULT));
             $result = $stmt->execute();
             if ($result) {
                 return true;
@@ -156,6 +156,44 @@ class userHelper
                 return 0;
             } else {
                 return 7;
+            }
+        } catch (Exception $e) {
+            error_log("Error at: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deactivate($id) {
+        try {
+            $db = DbHelper::getInstance()->getConnection();
+            $stmt = $db->prepare("UPDATE " . $this->table_name . " SET status = 0 WHERE _id = ?");
+            $stmt->bind_param("i", $id);
+            $result = $stmt->execute();
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            error_log("Error at: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function checkIfActive($email) {
+        try {
+            $db = DbHelper::getInstance()->getConnection();
+            $stmt = $db->prepare("SELECT * FROM " . $this->table_name . " WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $result = $stmt->execute();
+            if ($result) {
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                if ($row['status'] == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } catch (Exception $e) {
             error_log("Error at: " . $e->getMessage());
